@@ -5,10 +5,18 @@ import { use, useState } from "react";
 function App() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLasttName] = useState("");
-  const [isSubmitClicked, setIsSubmitClicked] = useState(false);
+  const [fullName, setFullName] = useState("");
+
+  const handleInputChange = (setter) => (e) => {
+    const value = e.target.value;
+    if (/^[A-Za-z\s]*$/.test(value)) {
+      // Allows only letters and spaces
+      setter(value);
+    }
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsSubmitClicked(true);
+    setFullName(`${firstName} ${lastName}`);
   };
 
   return (
@@ -23,9 +31,7 @@ function App() {
             <input
               required
               type="text"
-              onChange={(e) => {
-                setFirstName(e.target.value);
-              }}
+              onChange={handleInputChange(setFirstName)}
               value={firstName}
               placeholder="Enter FirstName"
             />
@@ -34,9 +40,7 @@ function App() {
             Last Name :
             <input
               type="text"
-              onChange={(e) => {
-                setLasttName(e.target.value);
-              }}
+              onChange={handleInputChange(setLasttName)}
               required
               value={lastName}
               placeholder="Enter LastName"
@@ -50,15 +54,7 @@ function App() {
         </div>
       </form>
 
-      {isSubmitClicked ? (
-        <>
-          {" "}
-          Full Name : {firstName}
-          {lastName}{" "}
-        </>
-      ) : (
-        <></>
-      )}
+      {fullName ? <> Full Name : {fullName}</> : <></>}
     </div>
   );
 }
